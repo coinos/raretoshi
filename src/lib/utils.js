@@ -279,7 +279,7 @@ export const linkify = (text) => {
   });
 };
 
-function post(endpoint, data) {
+export function post(endpoint, data) {
   return fetch(endpoint, {
     method: "POST",
     credentials: "include",
