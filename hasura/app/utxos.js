@@ -32,9 +32,7 @@ let balances = async (address, asset) => {
   let balances = {};
   (await utxos(address))
     .filter((tx) => !asset || tx.asset === asset)
-    .map((tx) =>
-        tx.confirmed ? confirmed.push(tx) : unconfirmed.push(tx)
-    );
+    .map((tx) => (tx.confirmed ? confirmed.push(tx) : unconfirmed.push(tx)));
 
   let sum = (a, b) => ({ ...a, [b.asset]: (a[b.asset] || 0) + b.value });
   confirmed = confirmed.reduce(sum, {});
@@ -45,7 +43,7 @@ let balances = async (address, asset) => {
 
 export const utxos = async (address) => {
   let { users } = await q(getUserByAddress, { address });
-  if (!users.length) return res.code.send("user not found");
+  if (!users.length) throw new Error("user not found");
   let { multisig, pubkey } = users[0];
   let key = fromBase58(pubkey, network);
   let hex = key.publicKey.toString("hex");
